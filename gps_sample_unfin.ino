@@ -5,9 +5,15 @@
 #include <SoftwareSerial.h>      // Include software serial library
 #include  "LiquidCrystal_I2C.h"
 
+
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 TinyGPSPlus gps;
- 
+TinyGPSCustom gpgla(gps,"GPGLL",1);
+TinyGPSCustom gpgns(gps,"GPGLL",2);
+TinyGPSCustom gpglo(gps,"GPGLL",3);
+TinyGPSCustom gpgew(gps,"GPGLL",4);
+
+
 #define S_RX    4                // Define software serial RX pin
 #define S_TX    3                // Define software serial TX pin
  
@@ -30,28 +36,32 @@ void setup(void) {
   delay(3000);
   lcd.clear(); //顯示清除 
 }
- 
 void loop() {
+Serial.println(gpgla.value());
+Serial.println(gpgns.value());
+Serial.println(gpglo.value());
+Serial.println(gpgew.value());
  
-  while (SoftSerial.available() > 0) {
- 
-    if (gps.encode(SoftSerial.read())) {
- 
-      if (gps.location.isValid()) {
-        Serial.print("Latitude   = ");
-        Serial.println(gps.location.lat(), 6);
-        Serial.print("Longitude  = ");
-        Serial.println(gps.location.lng(), 6);
-        lcd.setCursor(0, 0);
-        lcd.print("Latitude=");
-        lcd.print(gps.location.lat(), 6);
-        lcd.setCursor(0, 1); 
-        lcd.print("Longitude=");
-        lcd.print(gps.location.lng(), 6);
-      }
-      else
-        Serial.println("Location Invalid");
- 
+//   while (SoftSerial.available() > 0) {
+// 
+//    if (gps.encode(SoftSerial.read())) {
+// 
+//      if (gps.location.isValid()) {
+//        Serial.print("Latitude   = ");
+//        Serial.println(gps.location.lat(), 6);
+//        Serial.print("Longitude  = ");
+//        Serial.println(gps.location.lng(), 6);
+//        lcd.setCursor(0, 0);
+//        lcd.print("Latitude=");
+//        lcd.print(gps.location.lat(), 6);
+//        lcd.setCursor(0, 1); 
+//        lcd.print("Longitude=");
+//        lcd.print(gps.location.lng(), 6);
+//      }
+//      else
+//        Serial.println("Location Invalid");
+//    }
+//   }
 //      if (gps.altitude.isValid()) {
 //        Serial.print("Altitude   = ");
 //        Serial.print(gps.altitude.meters());
@@ -103,7 +113,3 @@ void loop() {
 //        Serial.println("Satellites Invalid");
  delay(1000);
     }
- 
-  }
- 
-}
